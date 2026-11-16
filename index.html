@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cup of Journey - Opening Hours</title>
+
+<style>
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Georgia, serif;
+  background: #f2eee4;
+}
+
+/* OPENING SECTION */
+
+.opening-section {
+  min-height: 100vh;
+  background: transparent;
+  color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+  text-align: center;
+}
+
+.container {
+  max-width: 650px;
+  width: 100%;
+}
+
+.logo {
+  font-size: 13px;
+  letter-spacing: 5px;
+  color: #c7a66a;
+  margin-bottom: 45px;
+}
+
+h1 {
+  font-size: clamp(50px, 9vw, 85px);
+  font-weight: normal;
+  margin-bottom: 20px;
+}
+
+.description {
+  color: #d1ded5;
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.divider {
+  width: 60px;
+  height: 1px;
+  background: #c7a66a;
+  margin: 40px auto;
+}
+
+/* HOURS */
+
+.days {
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: #c7a66a;
+  margin-bottom: 15px;
+}
+
+.hours {
+  font-size: clamp(25px, 5vw, 36px);
+  letter-spacing: 2px;
+  font-weight: normal;
+}
+
+/* STATUS */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-top: 35px;
+  padding: 13px 22px;
+
+  border: 1px solid #ffffff35;
+  border-radius: 50px;
+
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+
+  transition: .4s;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.status.open {
+  color: #a8d5ae;
+  border-color: #8fc99a80;
+}
+
+.status.open .dot {
+  background: transparan;
+  box-shadow: 0 0 12px #8fc99a;
+  animation: pulse 1.5s infinite;
+}
+
+.status.closed {
+  color: #e5a09a;
+  border-color: #e5a09a80;
+}
+
+.status.closed .dot {
+  background: transparant;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 #8fc99a80;
+  }
+
+  70% {
+    box-shadow: 0 0 0 9px #8fc99a00;
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 #8fc99a00;
+  }
+}
+
+.footer-text {
+  margin-top: 50px;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: #c7a66a;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+<section class="opening-section">
+
+  <div class="container">
+
+    <div class="logo">
+      CUP OF JOURNEY
+    </div>
+
+    <h1>We Are Open.</h1>
+
+    <p class="description">
+      Every day is a good day for coffee.
+      Take a moment, enjoy the journey,
+      and let the coffee tell its story.
+    </p>
+
+    <div class="divider"></div>
+
+    <div class="days">
+      MONDAY — SUNDAY
+    </div>
+
+    <div class="hours">
+      09.00 — 23.00
+    </div>
+
+    <div class="status" id="openingStatus">
+
+      <span class="dot"></span>
+
+      <span id="statusText">
+        CHECKING STATUS...
+      </span>
+
+    </div>
+
+    <div class="footer-text">
+      SABANG · ACEH · INDONESIA
+    </div>
+
+  </div>
+
+</section>
+
+
+<script>
+
+// CUP OF JOURNEY OPENING HOURS
+
+function updateStatus() {
+
+  // Mengambil waktu Sabang (WIB)
+
+  const now = new Date();
+
+  const time = new Intl.DateTimeFormat(
+    "en-GB",
+    {
+      timeZone: "Asia/Jakarta",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23"
+    }
+  ).format(now);
+
+  // Mengambil jam dan menit
+
+  const parts = time.split(":");
+
+  const hour = Number(parts[0]);
+  const minute = Number(parts[1]);
+
+  const currentMinutes = hour * 60 + minute;
+
+  // Jam operasional 09.00 sampai 23.00
+
+  const openingTime = 9 * 60;
+  const closingTime = 23 * 60;
+
+  const isOpen =
+    currentMinutes >= openingTime &&
+    currentMinutes < closingTime;
+
+  const status = document.getElementById(
+    "openingStatus"
+  );
+
+  const text = document.getElementById(
+    "statusText"
+  );
+
+  // Mengubah tampilan otomatis
+
+  if (isOpen) {
+
+    text.textContent = "WE ARE OPEN";
+
+    status.classList.add("open");
+    status.classList.remove("closed");
+
+  } else {
+
+    text.textContent = "WE ARE CLOSED";
+
+    status.classList.add("closed");
+    status.classList.remove("open");
+
+  }
+
+}
+
+// Jalankan ketika halaman dibuka
+
+updateStatus();
+
+// Periksa setiap 30 detik
+
+setInterval(updateStatus, 30000);
+
+</script>
+
+</body>
+
+</html>
