@@ -18,15 +18,22 @@
 
 body {
   font-family: Georgia, serif;
-  background: #f2eee4;
+  background: transparent;
 }
 
 /* OPENING SECTION */
 
+
+html,
+body {
+  background: transparent !important;
+}
+
 .opening-section {
   min-height: 100vh;
-  background: transparent;
-  color: #ffffff;
+  background: none !important;
+  background-color: transparent !important;
+  color: #23483b;
 
   display: flex;
   align-items: center;
@@ -37,15 +44,14 @@ body {
 }
 
 .container {
-  max-width: 650px;
-  width: 100%;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
-.logo {
-  font-size: 13px;
-  letter-spacing: 5px;
-  color: #c7a66a;
-  margin-bottom: 45px;
+.status {
+  background: transparent !important;
+}
+
 }
 
 h1 {
