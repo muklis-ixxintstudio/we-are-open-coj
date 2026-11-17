@@ -10,39 +10,29 @@
 
 <style>
 
+/* RESET */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  font-family: Georgia, serif;
-  background: transparent;
-}
-.open-link {
-  color: #23483b;
-  text-decoration: none;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.open-link:hover {
-  color: #c7a66a;
-  opacity: 0.8;
-}
-/* OPENING SECTION */
-
-
-html,
-body {
+html, body {
+  margin: 0;
+  padding: 0;
   background: transparent !important;
 }
 
+body {
+  font-family: Georgia, serif;
+}
+
+/* OPENING SECTION */
+
 .opening-section {
   min-height: 100vh;
-  background: none !important;
-  background-color: transparent !important;
+  background: transparent !important;
   color: #23483b;
 
   display: flex;
@@ -56,38 +46,68 @@ body {
 .container {
   background: transparent !important;
   box-shadow: none !important;
+  width: 100%;
+  max-width: 700px;
 }
 
-.status {
-  background: transparent !important;
+/* LOGO */
+
+.logo {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  letter-spacing: 5px;
+  margin-bottom: 35px;
+  color: #23483b;
 }
 
-}
+/* MAIN STATUS LINK */
 
-h1 {
-  font-size: clamp(50px, 9vw, 85px);
-  font-weight: normal;
-  margin-bottom: 20px;
-}
 .open-link {
   display: inline-block;
   position: relative;
-  z-index: 999;
+  z-index: 10;
+
   font-family: Georgia, serif;
-  font-size: clamp(50px, 9vw, 85px);
+  font-size: clamp(35px, 8vw, 75px);
   font-weight: normal;
-  margin-bottom: 20px;
-  color: inherit;
+
+  color: #23483b;
   text-decoration: none;
   cursor: pointer;
-  pointer-events: auto;
+
+  margin-bottom: 20px;
+
+  animation: blink 2s ease-in-out infinite;
+
+  transition: color 0.3s ease;
 }
+
+.open-link:hover {
+  color: #c7a66a;
+}
+
+/* BLINK ANIMATION */
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* DESCRIPTION */
+
 .description {
   font-size: 11px;
   letter-spacing: 0.5px;
   line-height: 1.1;
+  color: #23483b;
 }
 
+/* DIVIDER */
 
 .divider {
   width: 60px;
@@ -113,7 +133,7 @@ h1 {
   color: #f1e8d6;
 }
 
-/* STATUS */
+/* OPENING STATUS BADGE */
 
 .status {
   display: inline-flex;
@@ -123,6 +143,7 @@ h1 {
   margin-top: 35px;
   padding: 13px 22px;
 
+  background: transparent;
   border: 1px solid #ffffff35;
   border-radius: 50px;
 
@@ -133,11 +154,15 @@ h1 {
   transition: .4s;
 }
 
+/* STATUS DOT */
+
 .dot {
   width: 9px;
   height: 9px;
   border-radius: 50%;
 }
+
+/* OPEN */
 
 .status.open {
   color: #f1e8d6;
@@ -145,10 +170,12 @@ h1 {
 }
 
 .status.open .dot {
-  background: transparan;
+  background: #8fc99a;
   box-shadow: 0 0 12px #8fc99a;
   animation: pulse 1.5s infinite;
 }
+
+/* CLOSED */
 
 .status.closed {
   color: #b21500;
@@ -156,8 +183,11 @@ h1 {
 }
 
 .status.closed .dot {
-  background: transparant;
+  background: #b21500;
+  box-shadow: 0 0 8px #b21500;
 }
+
+/* PULSE ANIMATION */
 
 @keyframes pulse {
   0% {
@@ -173,6 +203,8 @@ h1 {
   }
 }
 
+/* FOOTER */
+
 .footer-text {
   margin-top: 50px;
   font-size: 12px;
@@ -180,10 +212,34 @@ h1 {
   color: #f1e8d6;
 }
 
+/* MOBILE */
+
+@media (max-width: 480px) {
+
+  .opening-section {
+    padding: 20px;
+  }
+
+  .logo {
+    margin-bottom: 25px;
+  }
+
+  .description {
+    font-size: 10px;
+  }
+
+  .days {
+    letter-spacing: 3px;
+  }
+
+  .footer-text {
+    font-size: 10px;
+  }
+
+}
+
 </style>
-
 </head>
-
 
 <body>
 
@@ -195,14 +251,20 @@ h1 {
       CUP OF JOURNEY
     </div>
 
- <a href="https://www.google.com/maps/place/Cup+of+journey/@5.8665233,95.3156383,17z/data=!3m1!4b1!4m6!3m5!1s0x3041c9c2c008246d:0x1984a3ca047fb349!8m2!3d5.8665233!4d95.3182132!16s%2Fg%2F11vrxmcz6d"
-   target="_blank"
-   class="open-link">
-  OPERATIONAL HOURS
-</a>
+    <!-- KLIK STATUS UNTUK MEMBUKA GOOGLE MAPS -->
+
+    <a
+      href="https://www.google.com/maps/place/Cup+of+journey/@5.8665233,95.3156383,17z/data=!3m1!4b1!4m6!3m5!1s0x3041c9c2c008246d:0x1984a3ca047fb349!8m2!3d5.8665233!4d95.3182132!16s%2Fg%2F11vrxmcz6d"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="open-link"
+      id="mainStatus"
+    >
+      WE ARE OPEN
+    </a>
 
     <p class="description">
-      Setiap hari adalah hari yang baik untuk menikmati kopi. 
+      Setiap hari adalah hari yang baik untuk menikmati kopi.
       Luangkan sejenak waktu, nikmati perjalanannya,
       dan biarkan kopi menuturkan kisahnya.
     </p>
@@ -235,14 +297,13 @@ h1 {
 
 </section>
 
-
 <script>
 
 // CUP OF JOURNEY OPENING HOURS
 
 function updateStatus() {
 
-  // Mengambil waktu Sabang (WIB)
+  // Waktu Sabang / WIB
 
   const now = new Date();
 
@@ -256,8 +317,6 @@ function updateStatus() {
     }
   ).format(now);
 
-  // Mengambil jam dan menit
-
   const parts = time.split(":");
 
   const hour = Number(parts[0]);
@@ -265,7 +324,7 @@ function updateStatus() {
 
   const currentMinutes = hour * 60 + minute;
 
-  // Jam operasional 09.00 sampai 23.00
+  // Jam operasional 09.00 - 23.00
 
   const openingTime = 9 * 60;
   const closingTime = 23 * 60;
@@ -282,36 +341,39 @@ function updateStatus() {
     "statusText"
   );
 
-  // Mengubah tampilan otomatis
+  const mainStatus = document.getElementById(
+    "mainStatus"
+  );
+
+  // STATUS OTOMATIS
 
   if (isOpen) {
 
-    text.textContent = "OPERATIONAL HOURS";
-
+    mainStatus.textContent = "WE ARE OPEN";
     status.classList.add("open");
     status.classList.remove("closed");
+    text.textContent = "OPEN NOW";
 
   } else {
 
-    text.textContent = "WE ARE CLOSED";
-
+    mainStatus.textContent = "WE ARE CLOSED";
     status.classList.add("closed");
     status.classList.remove("open");
+    text.textContent = "CLOSED NOW";
 
   }
 
 }
 
-// Jalankan ketika halaman dibuka
+// JALANKAN SAAT HALAMAN DIBUKA
 
 updateStatus();
 
-// Periksa setiap 30 detik
+// PERBARUI SETIAP 30 DETIK
 
 setInterval(updateStatus, 30000);
 
 </script>
 
 </body>
-
 </html>
