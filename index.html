@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -175,6 +174,19 @@ body {
   animation: pulse 1.5s infinite;
 }
 
+/* BREAK (18.10 - 19.30) */
+
+.status.break {
+  color: #c7a66a;
+  border-color: #c7a66a;
+}
+
+.status.break .dot {
+  background: #c7a66a;
+  box-shadow: 0 0 10px #c7a66a;
+  animation: pulseBreak 1.5s infinite;
+}
+
 /* CLOSED */
 
 .status.closed {
@@ -200,6 +212,20 @@ body {
 
   100% {
     box-shadow: 0 0 0 0 #8fc99a00;
+  }
+}
+
+@keyframes pulseBreak {
+  0% {
+    box-shadow: 0 0 0 0 #c7a66a80;
+  }
+
+  70% {
+    box-shadow: 0 0 0 9px #c7a66a00;
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 #c7a66a00;
   }
 }
 
@@ -236,6 +262,16 @@ body {
     font-size: 10px;
   }
 
+}
+
+/* HORMATI PENGGUNA YANG MEMATIKAN ANIMASI */
+
+@media (prefers-reduced-motion: reduce) {
+  .open-link,
+  .status.open .dot,
+  .status.break .dot {
+    animation: none;
+  }
 }
 
 </style>
@@ -301,64 +337,86 @@ body {
 
 // CUP OF JOURNEY OPENING HOURS
 
+// Jam operasional (dalam menit sejak 00.00)
+const OPENING_TIME = 9 * 60;           // 09.00
+const CLOSING_TIME = 23 * 60;          // 23.00
+const BREAK_START  = 18 * 60 + 10;     // 18.10
+const BREAK_END    = 19 * 60 + 30;     // 19.30
+
+// Break khusus hari Jum'at
+const FRIDAY_BREAK_START = 11 * 60 + 20;   // 11.20
+const FRIDAY_BREAK_END   = 14 * 60;        // 14.00
+
+// Ambil hari, jam & menit sekarang di zona waktu WIB (Sabang)
+function getNowWIB() {
+
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Jakarta",
+    weekday: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23"
+  }).formatToParts(new Date());
+
+  const weekday = parts.find(p => p.type === "weekday").value; // Mon, Tue, ... Fri
+  const hour    = Number(parts.find(p => p.type === "hour").value) % 24;
+  const minute  = Number(parts.find(p => p.type === "minute").value);
+
+  return {
+    isFriday: weekday === "Fri",
+    minutes: hour * 60 + minute
+  };
+
+}
+
 function updateStatus() {
 
-  // Waktu Sabang / WIB
+  const now = getNowWIB();
+  const currentMinutes = now.minutes;
 
-  const now = new Date();
+  const status     = document.getElementById("openingStatus");
+  const text       = document.getElementById("statusText");
+  const mainStatus = document.getElementById("mainStatus");
 
-  const time = new Intl.DateTimeFormat(
-    "en-GB",
-    {
-      timeZone: "Asia/Jakarta",
-      hour: "2-digit",
-      minute: "2-digit",
-      hourCycle: "h23"
-    }
-  ).format(now);
+  const isOperational =
+    currentMinutes >= OPENING_TIME &&
+    currentMinutes < CLOSING_TIME;
 
-  const parts = time.split(":");
+  // Break harian: 18.10 - 19.30
+  const isDailyBreak =
+    currentMinutes >= BREAK_START &&
+    currentMinutes < BREAK_END;
 
-  const hour = Number(parts[0]);
-  const minute = Number(parts[1]);
+  // Break Jum'at: 11.20 - 14.00
+  const isFridayBreak =
+    now.isFriday &&
+    currentMinutes >= FRIDAY_BREAK_START &&
+    currentMinutes < FRIDAY_BREAK_END;
 
-  const currentMinutes = hour * 60 + minute;
+  const isBreak = isDailyBreak || isFridayBreak;
 
-  // Jam operasional 09.00 - 23.00
-
-  const openingTime = 9 * 60;
-  const closingTime = 23 * 60;
-
-  const isOpen =
-    currentMinutes >= openingTime &&
-    currentMinutes < closingTime;
-
-  const status = document.getElementById(
-    "openingStatus"
-  );
-
-  const text = document.getElementById(
-    "statusText"
-  );
-
-  const mainStatus = document.getElementById(
-    "mainStatus"
-  );
+  // Hapus semua state lama
+  status.classList.remove("open", "break", "closed");
 
   // STATUS OTOMATIS
 
-  if (isOpen) {
+  if (isOperational && isBreak) {
+
+    // Break harian 18.10 - 19.30, atau Jum'at 11.20 - 14.00
+    mainStatus.textContent = "WE ARE BREAK";
+    status.classList.add("break");
+    text.textContent = "BREAK TIME";
+
+  } else if (isOperational) {
 
     mainStatus.textContent = "WE ARE OPEN";
     status.classList.add("open");
-    status.classList.remove("closed");
     text.textContent = "OPEN NOW";
 
   } else {
 
     mainStatus.textContent = "WE ARE CLOSED";
     status.classList.add("closed");
-    status.classList.remove("open");
     text.textContent = "CLOSED NOW";
 
   }
@@ -372,6 +430,12 @@ updateStatus();
 // PERBARUI SETIAP 30 DETIK
 
 setInterval(updateStatus, 30000);
+
+// PERBARUI LANGSUNG SAAT TAB KEMBALI DIBUKA
+
+document.addEventListener("visibilitychange", function () {
+  if (!document.hidden) updateStatus();
+});
 
 </script>
 
